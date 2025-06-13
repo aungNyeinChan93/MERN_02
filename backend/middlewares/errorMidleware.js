@@ -1,11 +1,11 @@
 
-
-const errorMiddleware = async (err, res) => {
-    const status = err.status ? err.status : 500;
-
+const errorMiddleware = (err, req, res, next) => {
+    const statusCode = req.statusCode ? req.statusCode : 500;
     if (err) {
-        return res.status(status).json({ error: err.message })
+        res.status(statusCode).json({
+            error: err.message
+        })
     }
-};
+}
 
-export default errorMiddleware
+export default errorMiddleware;
