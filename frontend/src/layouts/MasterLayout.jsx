@@ -1,11 +1,14 @@
 import React from "react";
 import { Outlet } from "react-router";
+import Navbar from "../components/base/Navbar";
 
 const MasterLayout = () => {
   return (
     <React.Fragment>
-      <header>nav</header>
-      <Outlet />
+      <div className="mx-2 lg:mx-[100px] py-3 ">
+        <Navbar />
+        <Outlet />
+      </div>
     </React.Fragment>
   );
 };
