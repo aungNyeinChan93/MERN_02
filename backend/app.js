@@ -1,5 +1,6 @@
 import express from 'express'
 import { config } from 'dotenv';
+import cors from 'cors'
 import connectDB from './connectDB.js';
 import authRouter from './routes/authRouter.js';
 import errorMiddleware from './middlewares/errorMidleware.js';
@@ -7,6 +8,7 @@ import workoutRouter from './routes/workout.js';
 
 // dotenv setup
 config();
+
 
 // server start
 const app = express();
@@ -22,6 +24,7 @@ connectDB(`mongodb+srv://mrlokidev:${db_password}@cluster0.wsdfbkt.mongodb.net/n
 
 // Global Middleware 
 app.use(express.json());
+app.use(cors({ credentials: true, origin: 'http://localhost:5173' }))
 
 
 // routes
