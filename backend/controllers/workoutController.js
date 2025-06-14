@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
 import WorkoutModel from "../models/Workout.js";
 
 const workoutController = {
     getAll: async (req, res, next) => {
         try {
-            const workouts = await WorkoutModel.find().lean();
+            const workouts = await WorkoutModel.find().sort({ 'createdAt': -1 }).lean();
             if (!workouts) {
                 res.status(400);
                 return next(new Error(`Workouts not Found!`))
@@ -29,6 +30,10 @@ const workoutController = {
     getWorkout: async (req, res, next) => {
         try {
             const { id } = req.params;
+            if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+                res.status(404);
+                return next(new Error('wotkout is not found!'))
+            }
             // const workout = await WorkoutModel.findOne({ _id: id }).lean();
             const workout = await WorkoutModel.findById(id).lean();
             if (!workout) {
@@ -43,6 +48,10 @@ const workoutController = {
     modify: async (req, res, next) => {
         try {
             const { id } = req.params;
+            if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+                res.status(404);
+                return next(new Error('wotkout is not found!'))
+            }
             const { title, read, load } = req.body;
             const workout = await WorkoutModel.findByIdAndUpdate(id, { title, read, load }).lean();
             if (!workout) {
@@ -57,6 +66,10 @@ const workoutController = {
     drop: async (req, res, next) => {
         try {
             const { id } = req.params;
+            if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+                res.status(404);
+                return next(new Error('wotkout is not found!'))
+            }
             const workout = await WorkoutModel.findByIdAndDelete(id, { rawResult: true }).select(['_id']).lean();
             if (!workout) {
                 res.status(400);
