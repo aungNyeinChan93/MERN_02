@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import useGet from "../../hooks/useGet";
 import WorkoutCard from "../../components/other/WorkoutCard";
 import Spinner from "../../components/base/Spinner";
 import Alert from "../../components/base/Alert";
 import { Link } from "react-router";
+import { workoutContext } from "../../contexts/WorkoutProvider";
 
 const WorkoutPage = () => {
   const { data, isLoading, error } = useGet(
     `${import.meta.env.VITE_URL}/api/workouts`
   );
 
-  //   console.log(data);
+  const { workouts, setWorkouts } = useContext(workoutContext);
+
+  useEffect(() => {
+    if (data) {
+      setWorkouts(data);
+    }
+  }, [data]);
+
   return (
     <React.Fragment>
       {isLoading && (
@@ -21,7 +29,7 @@ const WorkoutPage = () => {
         </>
       )}
 
-      {data && data.length > 0 && (
+      {data && data.length > 0 && workouts && (
         <>
           <div className="p-4 bg-slate-700  ">
             <div className="flex justify-end items-center">
@@ -34,7 +42,7 @@ const WorkoutPage = () => {
             </div>
           </div>
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 py-2">
-            {data?.map((workout) => {
+            {workouts?.map((workout) => {
               return <WorkoutCard key={workout._id} {...workout} />;
             })}
           </div>

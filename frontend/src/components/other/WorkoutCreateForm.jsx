@@ -9,12 +9,16 @@ const WorkoutCreateForm = () => {
   const [load, setLoad] = useState("");
 
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const createWorkout = async (e) => {
     e.preventDefault();
     try {
+      // check in clinet side
       if ((!title, !read, !load)) {
         throw new Error("some fields are required");
       }
+
+      // fetch api
       const response = await fetch(`${import.meta.env.VITE_URL}/api/workouts`, {
         method: "POST",
         credentials: "include",
@@ -25,17 +29,21 @@ const WorkoutCreateForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Create wotkout fail");
+        // error handle from server
+        throw new Error(await response.json().error);
       }
 
       const data = await response.json();
       if (data.mess === "success") {
         // console.log(data.result);
+        setError(false);
+        setErrorMessage("");
         return navigate("/workouts");
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
       setError(true);
+      setErrorMessage(error.message);
     }
   };
   return (
@@ -44,6 +52,12 @@ const WorkoutCreateForm = () => {
         className="space-y-4 max-w-md mx-auto mt-4"
         onSubmit={createWorkout}
       >
+        {errorMessage && (
+          <>
+            <p className="text-sm text-red-600">{errorMessage}</p>
+          </>
+        )}
+
         <input
           type="text"
           placeholder="Enter Title"
