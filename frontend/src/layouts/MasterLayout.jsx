@@ -5,7 +5,7 @@ import Navbar from "../components/base/Navbar";
 const MasterLayout = () => {
   return (
     <React.Fragment>
-      <div className="mx-2 lg:mx-[100px] py-3 ">
+      <div className="mx-2 lg:mx-[100px] py-3  h-screen">
         <Navbar />
         <Outlet />
       </div>

@@ -1,36 +1,36 @@
 import { useEffect, useState } from "react";
 
-const useGet = (url) => {
-  const [data, setData] = useState([]);
+const usePost = (url, payload) => {
+  const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
 
-  const getFetchData = async (url) => {
+  const fetchPost = async (url, payload) => {
     try {
-      // throw new Error("testing errorerrorerrorerrorerrorerror!");
       setLoading(true);
       const response = await fetch(url, {
-        method: "GET",
+        method: "POST",
         credentials: "include",
+        body: JSON.stringify(payload),
       });
+
       if (!response.ok) {
-        return setError(new Error("Fetching fail!"));
+        throw new Error("fail post data!");
       }
       const getData = await response.json();
       if (getData.mess === "success") {
-        setData(getData.result);
+        setData(getData);
       }
-      setLoading(false);
     } catch (error) {
       setError(error.message);
     }
   };
 
   useEffect(() => {
-    getFetchData(url);
-  }, [url]);
+    fetchPost(url, payload);
+  }, []);
 
   return { data, isLoading, error };
 };
 
-export default useGet;
+export default usePost;
