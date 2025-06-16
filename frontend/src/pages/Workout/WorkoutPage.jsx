@@ -19,7 +19,7 @@ const WorkoutPage = () => {
     if (data) {
       setWorkouts(data);
     }
-  }, [data]);
+  }, [data, setWorkouts]);
 
   const latestWorkouts = workouts && workouts.slice(0, 8);
 

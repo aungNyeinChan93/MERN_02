@@ -14,7 +14,7 @@ const WorkoutCreateForm = () => {
     e.preventDefault();
     try {
       // check in clinet side
-      if ((!title, !read, !load)) {
+      if (!title || !read || !load) {
         throw new Error("some fields are required");
       }
 

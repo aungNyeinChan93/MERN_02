@@ -23,7 +23,9 @@ const WorkoutCard = ({ title, read, load, createdAt, _id }) => {
         throw new Error(`${response.status} - delete fail`);
       }
       if (deleteData.mess === "success") {
-        setWorkouts((pre) => pre.filter((w) => w._id !== _id));
+        setWorkouts((pre) =>
+          pre.filter((w) => w._id !== (deleteData.result._id || _id))
+        );
       }
     } catch (error) {
       setError(error.message);
@@ -44,18 +46,18 @@ const WorkoutCard = ({ title, read, load, createdAt, _id }) => {
           <p className="text-blue-400 text-sm mt-4 ">
             ⌚ {formatISO9075(createdAt, { format: "extended" })}
           </p>
-          <button
+          {/* <button
             type="button"
             className="mt-6 px-5 py-2.5 rounded-lg text-white text-sm font-medium tracking-wider border-none outline-none bg-yellow-500 hover:bg-yellow-700 cursor-pointer"
           >
             ➡️ edit
-          </button>
+          </button> */}
           <button
             onClick={deleteWorkout}
             type="button"
-            className="mt-6 px-5 py-2.5 rounded-lg text-white text-sm font-medium tracking-wider border-none outline-none bg-red-500 hover:bg-red-700 cursor-pointer ms-2"
+            className="mt-6 px-4 py-2 rounded-lg text-white text-xs font-medium tracking-wider border-none outline-none bg-indigo-300 hover:bg-gray-700 cursor-pointer "
           >
-            ➡️ Delete
+            ❌
           </button>
         </div>
       </div>
