@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useGet from "../../hooks/useGet";
 import WorkoutCard from "../../components/other/WorkoutCard";
 import Spinner from "../../components/base/Spinner";
@@ -11,6 +11,8 @@ const WorkoutPage = () => {
     `${import.meta.env.VITE_URL}/api/workouts`
   );
 
+  const [seeMore, setSeeMore] = useState(true);
+
   const { workouts, setWorkouts } = useContext(workoutContext);
 
   useEffect(() => {
@@ -18,6 +20,8 @@ const WorkoutPage = () => {
       setWorkouts(data);
     }
   }, [data]);
+
+  const latestWorkouts = workouts && workouts.slice(0, 8);
 
   return (
     <React.Fragment>
@@ -41,10 +45,23 @@ const WorkoutPage = () => {
               </Link>
             </div>
           </div>
+          <div className="mt-2">
+            <button
+              className="px-4 py-2 bg-indigo-500 rounded-lg"
+              onClick={() => setSeeMore((pre) => !pre)}
+            >
+              {seeMore ? "Latest " : "Show All"}
+            </button>
+          </div>
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 py-2">
-            {workouts?.map((workout) => {
-              return <WorkoutCard key={workout._id} {...workout} />;
-            })}
+            {seeMore &&
+              workouts?.map((workout) => {
+                return <WorkoutCard key={workout._id} {...workout} />;
+              })}
+            {!seeMore &&
+              latestWorkouts?.map((workout) => {
+                return <WorkoutCard key={workout._id} {...workout} />;
+              })}
           </div>
         </>
       )}
