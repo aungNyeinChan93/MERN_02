@@ -8,21 +8,26 @@ const WorkoutCard = ({ title, read, load, createdAt, _id }) => {
   const { setWorkouts } = useContext(workoutContext);
 
   const deleteWorkout = async (e) => {
-    e.preventDefault();
-    const response = await fetch(
-      `${import.meta.env.VITE_URL}/api/workouts/${_id}`,
-      {
-        method: "Delete",
-        credentials: "include",
-      }
-    );
-    const deleteData = await response.json();
+    try {
+      e.preventDefault();
+      const response = await fetch(
+        `${import.meta.env.VITE_URL}/api/workouts/${_id}`,
+        {
+          method: "Delete",
+          credentials: "include",
+        }
+      );
+      const deleteData = await response.json();
 
-    if (!response.ok) {
-      throw new Error(`${response.status} - delete fail`);
-    }
-    if (deleteData.mess === "success") {
-      setWorkouts((pre) => pre.filter((w) => w._id !== _id));
+      if (!response.ok) {
+        throw new Error(`${response.status} - delete fail`);
+      }
+      if (deleteData.mess === "success") {
+        setWorkouts((pre) => pre.filter((w) => w._id !== _id));
+      }
+    } catch (error) {
+      setError(error.message);
+      console.error(error);
     }
   };
 
