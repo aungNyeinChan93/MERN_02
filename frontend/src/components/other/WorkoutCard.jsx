@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { formatISO9075 } from "date-fns";
+import { workoutContext } from "../../contexts/WorkoutProvider";
 
-const WorkoutCard = ({ title, read, load, createdAt }) => {
+const WorkoutCard = ({ title, read, load, createdAt, _id }) => {
+  const [error, setError] = useState(null);
+
+  const { setWorkouts } = useContext(workoutContext);
+
+  const deleteWorkout = async (e) => {
+    e.preventDefault();
+    const response = await fetch(
+      `${import.meta.env.VITE_URL}/api/workouts/${_id}`,
+      {
+        method: "Delete",
+        credentials: "include",
+      }
+    );
+    const deleteData = await response.json();
+
+    if (!response.ok) {
+      throw new Error(`${response.status} - delete fail`);
+    }
+    if (deleteData.mess === "success") {
+      setWorkouts((pre) => pre.filter((w) => w._id !== _id));
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="bg-white [box-shadow:0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-lg overflow-hidden mx-auto mt-4">
@@ -17,9 +41,16 @@ const WorkoutCard = ({ title, read, load, createdAt }) => {
           </p>
           <button
             type="button"
-            className="mt-6 px-5 py-2.5 rounded-lg text-white text-sm font-medium tracking-wider border-none outline-none bg-orange-500 hover:bg-orange-700 cursor-pointer"
+            className="mt-6 px-5 py-2.5 rounded-lg text-white text-sm font-medium tracking-wider border-none outline-none bg-yellow-500 hover:bg-yellow-700 cursor-pointer"
           >
             ➡️ edit
+          </button>
+          <button
+            onClick={deleteWorkout}
+            type="button"
+            className="mt-6 px-5 py-2.5 rounded-lg text-white text-sm font-medium tracking-wider border-none outline-none bg-red-500 hover:bg-red-700 cursor-pointer ms-2"
+          >
+            ➡️ Delete
           </button>
         </div>
       </div>
