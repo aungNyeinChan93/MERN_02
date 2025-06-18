@@ -9,7 +9,6 @@ import workoutRouter from './routes/workout.js';
 // dotenv setup
 config();
 
-
 // server start
 const app = express();
 const port = process.env.APP_PORT || 4000;

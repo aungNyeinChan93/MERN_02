@@ -10,6 +10,7 @@ const WorkoutCreateForm = () => {
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
   const createWorkout = async (e) => {
     e.preventDefault();
     try {

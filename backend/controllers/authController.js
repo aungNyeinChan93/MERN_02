@@ -1,11 +1,11 @@
 import UserModel from "../models/User.js";
+import { Bcrypt, JWT } from '../utils/helper.js'
 
 const authController = {
     register: async (req, res, next) => {
         try {
-            const { name, email, age, gender, active, password } = req.body;
-
-            const userDoc = await UserModel.create({ name, email, age, gender, active, password });
+            const { name, email, password } = req.body;
+            const userDoc = await UserModel.register(name, email, password);
             if (!userDoc) {
                 res.status(400);
                 return next(new Error('Resgister Fail!'))
@@ -18,6 +18,19 @@ const authController = {
             return next(error)
         }
     },
+    login: async (req, res, next) => {
+        try {
+            const { email, password } = req.body;
+            const token = await UserModel.login(email, password);
+            return res.status(200).json({
+                mess: 'success',
+                result: token
+            })
+        } catch (error) {
+            return next(error)
+        }
+    },
+
 }
 
 export default authController;

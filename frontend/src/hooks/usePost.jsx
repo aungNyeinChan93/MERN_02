@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const usePost = (url, payload) => {
+const usePost = () => {
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -13,24 +13,20 @@ const usePost = (url, payload) => {
         credentials: "include",
         body: JSON.stringify(payload),
       });
+      const getData = await response.json();
 
       if (!response.ok) {
-        throw new Error("fail post data!");
+        throw new Error(getData.error);
       }
-      const getData = await response.json();
       if (getData.mess === "success") {
-        setData(getData);
+        setData(getData.result);
       }
     } catch (error) {
       setError(error.message);
     }
   };
 
-  useEffect(() => {
-    fetchPost(url, payload);
-  }, []);
-
-  return { data, isLoading, error };
+  return { fetchPost, isLoading, error };
 };
 
 export default usePost;
