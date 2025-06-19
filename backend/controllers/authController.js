@@ -30,6 +30,31 @@ const authController = {
             return next(error)
         }
     },
+    userInfo: async (req, res, next) => {
+        try {
+            // get token
+            // const authHeader = req.headers['authorization'];
+            const authHeader = req.get('Authorization')
+            const token = authHeader && authHeader.split(' ')[1]; // removes "Bearer"
+
+            if (!token) {
+                res.status(400);
+                return next(new Error('can not authorize'))
+            }
+            const { id } = JWT.verify_token(token, process.env.JWT_SECRET);
+            const auth = await UserModel.findById(id).select(['name', 'email']).lean();
+            if (!auth) {
+                res.status(400);
+                return next(new Error('user not found!'))
+            }
+            res.status(200).json({
+                mess: 'success',
+                result: auth
+            })
+        } catch (error) {
+            return next(error)
+        }
+    }
 
 }
 

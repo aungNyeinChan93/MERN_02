@@ -7,11 +7,13 @@ import WorkoutCreatePage from './pages/Workout/WorkoutCreatePage';
 import AuthLayout from './layouts/AuthLayout';
 import RegisterPage from './pages/Auth/RegisterPage';
 import LoginPage from './pages/Auth/LoginPage';
+import { authLoader } from './helpers/loaders/authLoader';
 
 const router = createBrowserRouter([
     {
         path: '/',
         Component: MasterLayout,
+        loader: authLoader,
         children: [
             { index: true, Component: HomePage },
             { path: '/about', Component: AboutPage },

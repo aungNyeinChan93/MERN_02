@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import { useNavigate } from "react-router";
+import { authContext } from "../../contexts/AuthContextProvider";
 
 const LoginForm = () => {
+  const { setToken } = useContext(authContext);
+
+  const { login: loginDef, isLoading, error } = useLogin();
+
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
-  const { login: loginDef, isLoading, error } = useLogin();
+
   const navigate = useNavigate();
 
   const login = async (e) => {
@@ -15,8 +20,8 @@ const LoginForm = () => {
         email,
         password,
       });
-      console.log(token);
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", JSON.stringify(token));
+      setToken(token);
       return navigate("/");
     } catch (error) {
       console.error(error.message);

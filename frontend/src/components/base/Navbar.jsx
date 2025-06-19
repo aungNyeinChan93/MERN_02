@@ -1,12 +1,21 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router";
+import React, { useContext, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
 import { navlinks } from "../../helpers/navLinks";
+import { authContext } from "../../contexts/AuthContextProvider";
 
 const Navbar = () => {
+  const { auth, setAuth } = useContext(authContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setMenuOpen((prev) => !prev);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setAuth(null);
+    navigate("/auth/login");
   };
 
   return (
@@ -67,6 +76,7 @@ const Navbar = () => {
             <button
               type="button"
               className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-white text-[15px] font-medium flex items-center justify-center gap-2 cursor-pointer"
+              onClick={logout}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +89,7 @@ const Navbar = () => {
                   data-original="#000000"
                 />
               </svg>
-              Login
+              {auth?.name} || Logout
             </button>
 
             <button
