@@ -5,6 +5,7 @@ import connectDB from './connectDB.js';
 import authRouter from './routes/authRouter.js';
 import errorMiddleware from './middlewares/errorMidleware.js';
 import workoutRouter from './routes/workout.js';
+import tokenMiddlware from './middlewares/tokenMiddleware.js';
 
 // dotenv setup
 config();
@@ -28,7 +29,7 @@ app.use(cors({ credentials: true, origin: 'http://localhost:5173' }))
 
 // routes
 app.use('/api/auth', authRouter);
-app.use('/api/workouts', workoutRouter)
+app.use('/api/workouts', tokenMiddlware, workoutRouter)
 
 
 // Error Middleware

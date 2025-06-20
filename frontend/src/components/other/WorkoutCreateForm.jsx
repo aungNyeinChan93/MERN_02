@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
+import { authContext } from "../../contexts/AuthContextProvider";
 
 const WorkoutCreateForm = () => {
   const navigate = useNavigate();
@@ -10,6 +12,8 @@ const WorkoutCreateForm = () => {
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const { token } = useContext(authContext);
 
   const createWorkout = async (e) => {
     e.preventDefault();
@@ -25,16 +29,20 @@ const WorkoutCreateForm = () => {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${JSON.stringify(token)}`,
         },
         body: JSON.stringify({ title, read, load }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        // error handle from server
-        throw new Error(await response.json().error);
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        throw new Error("Workout create fail");
       }
 
-      const data = await response.json();
       if (data.mess === "success") {
         // console.log(data.result);
         setError(false);

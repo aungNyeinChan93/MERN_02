@@ -5,10 +5,17 @@ import Spinner from "../../components/base/Spinner";
 import Alert from "../../components/base/Alert";
 import { Link } from "react-router";
 import { workoutContext } from "../../contexts/WorkoutProvider";
+import { authContext } from "../../contexts/AuthContextProvider";
 
 const WorkoutPage = () => {
+  // const token = JSON.parse(localStorage.getItem("token"));
+  // console.log(token);
+
+  const { token } = useContext(authContext);
+
   const { data, isLoading, error } = useGet(
-    `${import.meta.env.VITE_URL}/api/workouts`
+    `${import.meta.env.VITE_URL}/api/workouts`,
+    JSON.stringify(token)
   );
 
   const [seeMore, setSeeMore] = useState(true);

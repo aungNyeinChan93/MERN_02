@@ -4,7 +4,7 @@ import { navlinks } from "../../helpers/navLinks";
 import { authContext } from "../../contexts/AuthContextProvider";
 
 const Navbar = () => {
-  const { auth, setAuth } = useContext(authContext);
+  const { auth, setAuth, token, setToken } = useContext(authContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -15,6 +15,7 @@ const Navbar = () => {
   const logout = () => {
     localStorage.removeItem("token");
     setAuth(null);
+    setToken(null);
     navigate("/auth/login");
   };
 

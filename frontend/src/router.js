@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     {
         path: '/',
         Component: MasterLayout,
-        loader: authLoader,
+        loader: authLoader, // !auth return to login
         children: [
             { index: true, Component: HomePage },
             { path: '/about', Component: AboutPage },

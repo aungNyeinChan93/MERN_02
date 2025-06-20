@@ -22,5 +22,5 @@ export const authLoader = async () => {
     return redirect("/auth/login");
   }
   const { result: auth } = await response.json();
-  return { auth };
+  return { auth, token: JSON.stringify(token) };
 };

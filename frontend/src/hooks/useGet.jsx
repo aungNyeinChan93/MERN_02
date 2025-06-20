@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 
-const useGet = (url) => {
+const useGet = (url, token) => {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
 
-  const getFetchData = async (url) => {
+  const getFetchData = async (url, token) => {
     try {
       // throw new Error("testing errorerrorerrorerrorerrorerror!");
       setLoading(true);
       const response = await fetch(url, {
         method: "GET",
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
-        return setError(new Error("Fetching fail!"));
+        setError("Fetching fail!");
+        setLoading(false);
+        return;
       }
       const getData = await response.json();
       if (getData.mess === "success") {
@@ -23,11 +27,12 @@ const useGet = (url) => {
       setLoading(false);
     } catch (error) {
       setError(error.message);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    getFetchData(url);
+    getFetchData(url, token);
   }, [url]);
 
   return { data, isLoading, error };

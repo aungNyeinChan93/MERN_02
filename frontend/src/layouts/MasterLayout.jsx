@@ -4,13 +4,14 @@ import Navbar from "../components/base/Navbar";
 import { authContext } from "../contexts/AuthContextProvider";
 
 const MasterLayout = () => {
-  const { auth } = useLoaderData();
+  const { auth, token } = useLoaderData();
 
-  const { setAuth } = useContext(authContext);
+  const { setAuth, setToken } = useContext(authContext);
 
   useEffect(() => {
     setAuth(auth);
-  }, [auth, setAuth]);
+    setToken(token);
+  }, [auth, token]);
 
   return (
     <React.Fragment>

@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import { formatISO9075 } from "date-fns";
 import { workoutContext } from "../../contexts/WorkoutProvider";
+import { authContext } from "../../contexts/AuthContextProvider";
 
 const WorkoutCard = ({ title, read, load, createdAt, _id }) => {
   const [error, setError] = useState(null);
+  const { token } = useContext(authContext);
 
   const { setWorkouts } = useContext(workoutContext);
 
@@ -15,11 +17,17 @@ const WorkoutCard = ({ title, read, load, createdAt, _id }) => {
         {
           method: "Delete",
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${JSON.stringify(token)}`,
+          },
         }
       );
       const deleteData = await response.json();
 
       if (!response.ok) {
+        if (deleteData.error) {
+          throw new Error(deleteData.error);
+        }
         throw new Error(`${response.status} - delete fail`);
       }
       if (deleteData.mess === "success") {
